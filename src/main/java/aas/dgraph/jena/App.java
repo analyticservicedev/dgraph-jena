@@ -16,6 +16,7 @@ public class App {
         Dataset ds = DatasetFactory.wrap(dbs);
         FusekiServer server = FusekiServer.create()
                 .add("/ds", ds)
+                .port(6080)
                 .build();
         server.start();
     }
