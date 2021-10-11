@@ -11,8 +11,10 @@ import java.util.Iterator;
 
 public class DgraphQuadTable {
     private static final Logger logger = LoggerFactory.getLogger(DgraphQuadTable.class);
+    private final String endpoint;
 
-    public DgraphQuadTable() {
+    public DgraphQuadTable(String dgraphEndpoint) {
+        this.endpoint = dgraphEndpoint;
     }
 
     public void add(Quad quad) {

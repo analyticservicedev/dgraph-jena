@@ -46,18 +46,18 @@ public class DgraphDBStorageBuilder {
     private final Collection<TransactionListener> listeners = new ArrayList();
     private static boolean warnAboutOptimizer = true;
 
-    public static DatasetGraphDgraphDB build(Location location) {
-        TransactionCoordinator txnCoord = buildTransactionCoordinator(location);
+    public static DatasetGraphDgraphDB build(String dgraphEndpoint, Location logLocation) {
+        TransactionCoordinator txnCoord = buildTransactionCoordinator(logLocation);
         TransactionalSystem txnSystem = new TransactionalBase(txnCoord);
-        DgraphDBStorageBuilder builder = new DgraphDBStorageBuilder(txnSystem, location, new ComponentIdMgr(UUID.randomUUID()));
-        StorageDgraphDB storage = builder.buildStorage();
+        DgraphDBStorageBuilder builder = new DgraphDBStorageBuilder(txnSystem, logLocation, new ComponentIdMgr(UUID.randomUUID()));
+        StorageDgraphDB storage = builder.buildStorage(dgraphEndpoint);
         StoragePrefixes prefixes = builder.buildPrefixes();
         Objects.requireNonNull(txnCoord);
         builder.components.forEach(txnCoord::add);
         builder.listeners.forEach(txnCoord::addListener);
         txnCoord.start();
-        ReorderTransformation reorderTranform = chooseReorderTransformation(location);
-        DatasetGraphDgraphDB dsg = new DatasetGraphDgraphDB(location, reorderTranform, storage, prefixes, txnSystem);
+        ReorderTransformation reorderTranform = chooseReorderTransformation(logLocation);
+        DatasetGraphDgraphDB dsg = new DatasetGraphDgraphDB(logLocation, reorderTranform, storage, prefixes, txnSystem);
         // ???
         QC.setFactory(dsg.getContext(), OpExecutorTDB2.OpExecFactoryTDB);
 
@@ -70,7 +70,6 @@ public class DgraphDBStorageBuilder {
         TransactionCoordinator txnCoord = new TransactionCoordinator(journal);
         return txnCoord;
     }
-
 
 
     private static void error(Logger log, String msg) throws DgraphDBException {
@@ -86,9 +85,9 @@ public class DgraphDBStorageBuilder {
         this.componentIdMgr = componentIdMgr;
     }
 
-    private StorageDgraphDB buildStorage() {
-        DgraphTripleTable tripleTable = this.buildTripleTable();
-        DgraphQuadTable quadTable = this.buildQuadTable();
+    private StorageDgraphDB buildStorage(String dgraphEndpoint) {
+        DgraphTripleTable tripleTable = this.buildTripleTable(dgraphEndpoint);
+        DgraphQuadTable quadTable = this.buildQuadTable(dgraphEndpoint);
         StorageDgraphDB dsg = new StorageDgraphDB(this.txnSystem, tripleTable, quadTable);
         return dsg;
     }
@@ -98,13 +97,13 @@ public class DgraphDBStorageBuilder {
         return prefixes;
     }
 
-    private DgraphTripleTable buildTripleTable() {
-        DgraphTripleTable tripleTable = new DgraphTripleTable();
+    private DgraphTripleTable buildTripleTable(String dgraphEndpoint) {
+        DgraphTripleTable tripleTable = new DgraphTripleTable(dgraphEndpoint);
         return tripleTable;
     }
 
-    private DgraphQuadTable buildQuadTable() {
-        DgraphQuadTable tripleTable = new DgraphQuadTable();
+    private DgraphQuadTable buildQuadTable(String dgraphEndpoint) {
+        DgraphQuadTable tripleTable = new DgraphQuadTable(dgraphEndpoint);
         return tripleTable;
     }
 

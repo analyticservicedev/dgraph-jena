@@ -1,17 +1,21 @@
 package aas.dgraph.jena.store;
 
-import org.apache.jena.atlas.iterator.Iter;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class DgraphTripleTable {
     private static final Logger logger = LoggerFactory.getLogger(DgraphTripleTable.class);
+    private final String endpoint;
 
-    public DgraphTripleTable() {
+    public DgraphTripleTable(String dgraphEndpoint) {
+        this.endpoint = dgraphEndpoint;
     }
 
     public void add(Triple triple) {
@@ -27,13 +31,30 @@ public class DgraphTripleTable {
     }
 
     public void delete(Node s, Node p, Node o) {
-
+        logger.info("Delete {} {} {}", s, p, o);
     }
 
+    /**
+     * TODO: query in dgraph
+     *
+     * @param s
+     * @param p
+     * @param o
+     * @return
+     */
     public Iterator<Triple> find(Node s, Node p, Node o) {
         logger.info("Find {} {} {}", s, p, o);
-        return Iter.nullIterator();
+        List<Triple> mock = new ArrayList<>();
+
+        Node ns = NodeFactory.createBlankNode("hello");
+        Node np = NodeFactory.createURI("http://dgraphjena");
+        Node no = NodeFactory.createLiteral("dgraph");
+
+        Triple e = new Triple(ns, np, no);
+        mock.add(e);
+        return mock.iterator();
     }
+
 
     public void clearTriples() {
     }
