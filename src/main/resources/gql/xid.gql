@@ -1,0 +1,5 @@
+query {
+    x(func: eq(xid, <${subject}>)) {
+        subUid as uid
+    }
+}

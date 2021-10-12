@@ -29,6 +29,7 @@ public class DgraphTripleTable {
 
     public void add(Node s, Node p, Node o) {
         logger.info("Add {} {} {}", s, p, o);
+        dgraph.add(s, p, o);
     }
 
     public void delete(Triple triple) {

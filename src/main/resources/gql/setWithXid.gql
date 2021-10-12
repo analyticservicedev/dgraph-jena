@@ -1,0 +1,2 @@
+uid(subUid) <xid> ${subject} .
+uid(subUid) ${predict} ${object}  .

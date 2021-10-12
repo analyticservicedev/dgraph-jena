@@ -12,11 +12,11 @@ public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
         System.out.println("Hello world!");
-        DatasetGraphDgraphDB dbs = DgraphDBStorageBuilder.build("localhost:6080", Location.create("logs"));
+        DatasetGraphDgraphDB dbs = DgraphDBStorageBuilder.build("localhost:9080", Location.create("logs"));
         Dataset ds = DatasetFactory.wrap(dbs);
         FusekiServer server = FusekiServer.create()
                 .add("/ds", ds)
-                .port(6080)
+                .port(6384)
                 .build();
         server.start();
     }

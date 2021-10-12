@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -70,5 +71,18 @@ public abstract class Gql {
             x.put(keyVals[i], keyVals[i + 1]);
         }
         return render(tpl, x);
+    }
+
+    public static String wellFormatValue(String input) {
+        if (input.startsWith("\"") && input.endsWith("\"")) {
+            return input;
+        }
+        return "\"" + input + "\"";
+    }
+    public static String wellFormatPredict(String input) {
+        if (input.startsWith("<") && input.endsWith(">")) {
+            return input;
+        }
+        return "<" + input + ">";
     }
 }
