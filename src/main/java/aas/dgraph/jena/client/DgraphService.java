@@ -122,7 +122,6 @@ public class DgraphService {
     }
 
     private Iterator<Triple> rdfStringToTriples(String rdfstr) {
-        logger.info("RDFs {}", rdfstr);
         if (rdfstr.isEmpty()) {
             return Iter.nullIter();
         }
