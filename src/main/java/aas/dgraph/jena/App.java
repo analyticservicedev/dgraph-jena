@@ -4,15 +4,19 @@ import org.apache.jena.dboe.base.file.Location;
 import org.apache.jena.fuseki.main.FusekiServer;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class App {
+
     public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
+        ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
         System.out.println("Hello world!");
-        DatasetGraphDgraphDB dbs = DgraphDBStorageBuilder.build("localhost:9080", Location.create("logs"));
+        String dgraph = ctx.getEnvironment().getProperty("dgraph.endpoint");
+        DatasetGraphDgraphDB dbs = DgraphDBStorageBuilder.build(dgraph, Location.create("logs"));
         Dataset ds = DatasetFactory.wrap(dbs);
         FusekiServer server = FusekiServer.create()
                 .add("/ds", ds)

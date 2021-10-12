@@ -8,13 +8,11 @@ import io.dgraph.Transaction;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.apache.jena.atlas.iterator.Iter;
-import org.apache.jena.atlas.iterator.IteratorWithBuffer;
 import org.apache.jena.atlas.json.JSON;
 import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdfconnection.RDFConnectionLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +69,7 @@ public class DgraphService {
     public void add(Node s, Node p, Node o) {
         try {
             Transaction trans = client.newTransaction();
-            String xidQuery = Gql.render(Gql.load("gql/xid.gql"), "subject", s.toString());
+            String xidQuery = Gql.render(Gql.load("gql/xid.gql"), "subject", cleanString(s.toString()));
             String setQuery = Gql.render(Gql.load("gql/setWithXid.gql"),
                     "subject", Gql.wellFormatValue(s.toString()),
                     "predict", Gql.wellFormatPredict(p.toString()),
@@ -167,7 +165,7 @@ public class DgraphService {
     public void delete(Node s, Node p, Node o) {
         try {
             Transaction trans = client.newTransaction();
-            String xidQuery = Gql.render(Gql.load("gql/xid.gql"), "subject", s.toString());
+            String xidQuery = Gql.render(Gql.load("gql/xid.gql"), "subject", cleanString(s.toString()));
             String setQuery = Gql.render(Gql.load("gql/deleteWithXid.gql"),
                     "subject", Gql.wellFormatValue(s.toString()),
                     "predict", Gql.wellFormatPredict(p.toString()),
@@ -182,6 +180,7 @@ public class DgraphService {
                             .build())
                     .build());
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error(e.toString());
         }
     }
