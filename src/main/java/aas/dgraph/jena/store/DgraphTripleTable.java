@@ -38,6 +38,7 @@ public class DgraphTripleTable {
 
     public void delete(Node s, Node p, Node o) {
         logger.info("Delete {} {} {}", s, p, o);
+        dgraph.delete(s, p, o);
     }
 
     /**

@@ -163,4 +163,26 @@ public class DgraphService {
         }
         return s;
     }
+
+    public void delete(Node s, Node p, Node o) {
+        try {
+            Transaction trans = client.newTransaction();
+            String xidQuery = Gql.render(Gql.load("gql/xid.gql"), "subject", s.toString());
+            String setQuery = Gql.render(Gql.load("gql/deleteWithXid.gql"),
+                    "subject", Gql.wellFormatValue(s.toString()),
+                    "predict", Gql.wellFormatPredict(p.toString()),
+                    "object", Gql.wellFormatValue(o.toString()));
+
+            trans.doRequest(DgraphProto.Request.newBuilder()
+                    .setCommitNow(true)
+                    .setQuery(xidQuery)
+                    .addMutations(DgraphProto.Mutation.newBuilder()
+                            // set delete
+                            .setDelNquads(ByteString.copyFromUtf8(setQuery))
+                            .build())
+                    .build());
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+    }
 }
