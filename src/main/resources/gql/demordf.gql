@@ -1,0 +1,13 @@
+
+{
+	var(func: type(N)){
+    u as uid
+
+	}
+	q(func: uid(u)){
+	    name
+      friend {
+        uid
+      }
+	}
+}

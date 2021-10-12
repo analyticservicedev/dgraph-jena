@@ -1,5 +1,10 @@
 package aas.dgraph.jena.store;
 
+import aas.dgraph.jena.client.DgraphService;
+import io.dgraph.*;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import org.apache.jena.base.Sys;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
@@ -12,10 +17,10 @@ import java.util.List;
 
 public class DgraphTripleTable {
     private static final Logger logger = LoggerFactory.getLogger(DgraphTripleTable.class);
-    private final String endpoint;
+    private final DgraphService dgraph;
 
     public DgraphTripleTable(String dgraphEndpoint) {
-        this.endpoint = dgraphEndpoint;
+        this.dgraph = new DgraphService(dgraphEndpoint);
     }
 
     public void add(Triple triple) {
