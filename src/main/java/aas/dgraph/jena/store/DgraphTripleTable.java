@@ -50,15 +50,7 @@ public class DgraphTripleTable {
      */
     public Iterator<Triple> find(Node s, Node p, Node o) {
         logger.info("Find {} {} {}", s, p, o);
-        List<Triple> mock = new ArrayList<>();
-
-        Node ns = NodeFactory.createBlankNode("hello");
-        Node np = NodeFactory.createURI("http://dgraphjena");
-        Node no = NodeFactory.createLiteral("dgraph");
-
-        Triple e = new Triple(ns, np, no);
-        mock.add(e);
-        return mock.iterator();
+        return dgraph.find(s, p, o);
     }
 
 

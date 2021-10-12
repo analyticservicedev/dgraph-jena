@@ -1,6 +1,5 @@
 package aas.dgraph.jena.client;
 
-import aas.dgraph.jena.store.DgraphTripleTable;
 import com.google.protobuf.ByteString;
 import io.dgraph.DgraphClient;
 import io.dgraph.DgraphGrpc;
@@ -8,9 +7,13 @@ import io.dgraph.DgraphProto;
 import io.dgraph.Transaction;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.apache.jena.atlas.iterator.Iter;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
 
 public class DgraphService {
     private static final Logger logger = LoggerFactory.getLogger(DgraphService.class);
@@ -70,8 +73,11 @@ public class DgraphService {
                             .build())
                     .build());
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error(e.toString());
         }
+    }
+
+    public Iterator<Triple> find(Node s, Node p, Node o) {
+        return Iter.nullIterator();
     }
 }
