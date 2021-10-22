@@ -1,0 +1,5 @@
+query {
+    findAny(func: has(xid)) @filter(eq(${pred}, ${val})) {
+        ${pred}
+    }
+}

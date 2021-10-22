@@ -94,6 +94,11 @@ public class DatasetGraphDgraphDB extends DatasetGraphStorage {
         return GraphDgraphDB.db_createDefaultGraph(this, this.getStoragePrefixes());
     }
 
+    @Override
+    public void setDefaultGraph(Graph g) {
+
+    }
+
     public GraphDgraphDB getGraphTDB(Node graphNode) {
         this.checkNotClosed();
         return GraphDgraphDB.db_createNamedGraph(this, graphNode, this.getStoragePrefixes());

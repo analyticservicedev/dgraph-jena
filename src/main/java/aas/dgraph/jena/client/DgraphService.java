@@ -88,11 +88,30 @@ public class DgraphService {
     }
 
     public Iterator<Triple> find(Node s, Node p, Node o) {
+        if (s == null) {
+            return findNull(p, o);
+        }
         if (s == Node.ANY) {
             return findAny(p, o);
         } else {
             return findSome(s, p, o);
         }
+    }
+
+    private Iterator<Triple> findNull(Node p, Node o) {
+        if (p == null) {
+            return Iter.nullIter();
+        }
+        String gql = Gql.render(Gql.load("gql/findNull.gql"),
+                "pred", Gql.wellFormatPredict(p.toString()),
+                "val", Gql.wellFormatValue(o.toString())
+        );
+        logger.info("{}", gql);
+        Transaction rot = client.newReadOnlyTransaction();
+        DgraphProto.Response resp = rot.queryRDF(gql);
+        String rdfs = resp.getRdf().toStringUtf8();
+        logger.info("{}", rdfs);
+        return rdfStringToTriples(rdfs);
     }
 
     private Iterator<Triple> findSome(Node s, Node p, Node o) {
