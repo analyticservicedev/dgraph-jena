@@ -102,9 +102,24 @@ public class DgraphService {
         if (p == null) {
             return Iter.nullIter();
         }
+        if (o == null) {
+            return findPred(p);
+        }
         String gql = Gql.render(Gql.load("gql/findNull.gql"),
                 "pred", Gql.wellFormatPredict(p.toString()),
                 "val", Gql.wellFormatValue(o.toString())
+        );
+        logger.info("{}", gql);
+        Transaction rot = client.newReadOnlyTransaction();
+        DgraphProto.Response resp = rot.queryRDF(gql);
+        String rdfs = resp.getRdf().toStringUtf8();
+        logger.info("{}", rdfs);
+        return rdfStringToTriples(rdfs);
+    }
+
+    private Iterator<Triple> findPred(Node p) {
+        String gql = Gql.render(Gql.load("gql/findPred.gql"),
+                "pred", Gql.wellFormatPredict(p.toString())
         );
         logger.info("{}", gql);
         Transaction rot = client.newReadOnlyTransaction();
@@ -122,9 +137,14 @@ public class DgraphService {
         Transaction rot = client.newReadOnlyTransaction();
         DgraphProto.Response resp = rot.queryRDF(gql);
         String rdfs = resp.getRdf().toStringUtf8();
-//        logger.info("{}", rdfs);
-
         return rdfStringToTriples(rdfs);
+    }
+
+    private Iterator<Triple> singleSPO(Node sub, Node pre, Node obj) {
+        Triple t = new Triple(sub, pre, obj);
+        ArrayList<Triple> l = new ArrayList<Triple>();
+        l.add(t);
+        return l.iterator();
     }
 
     private Iterator<Triple> findAny(Node p, Node o) {
@@ -134,7 +154,7 @@ public class DgraphService {
         Transaction rot = client.newReadOnlyTransaction();
         DgraphProto.Response resp = rot.queryRDF(gql);
         String rdfs = resp.getRdf().toStringUtf8();
-        logger.info("{}", rdfs);
+//        logger.info("{}", rdfs);
         return rdfStringToTriples(rdfs);
     }
 

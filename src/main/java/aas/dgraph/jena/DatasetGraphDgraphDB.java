@@ -19,6 +19,7 @@ public class DatasetGraphDgraphDB extends DatasetGraphStorage {
     private final TransactionalSystem txnSystem;
     private final ReorderTransformation reorderTransformation;
     private boolean isClosed = false;
+    private Graph defaultGraph;
 
     public DatasetGraphDgraphDB(
             Location location, ReorderTransformation reorderTransformation,
@@ -78,11 +79,14 @@ public class DatasetGraphDgraphDB extends DatasetGraphStorage {
     }
 
     public Graph getDefaultGraph() {
-        return this.getDefaultGraphDgraphDB();
+        if (defaultGraph == null) {
+            defaultGraph = this.getDefaultGraphDgraphDB();
+        }
+        return defaultGraph;
     }
 
     public Graph getGraph(Node graphNode) {
-        return this.getGraphTDB(graphNode);
+        return this.getGraphDgraphDB(graphNode);
     }
 
     public Graph getUnionGraph() {
@@ -96,10 +100,10 @@ public class DatasetGraphDgraphDB extends DatasetGraphStorage {
 
     @Override
     public void setDefaultGraph(Graph g) {
-
+        this.defaultGraph = g;
     }
 
-    public GraphDgraphDB getGraphTDB(Node graphNode) {
+    public GraphDgraphDB getGraphDgraphDB(Node graphNode) {
         this.checkNotClosed();
         return GraphDgraphDB.db_createNamedGraph(this, graphNode, this.getStoragePrefixes());
     }

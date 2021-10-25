@@ -1,0 +1,5 @@
+query {
+    findAny(func: has(xid)){
+        ${pred}
+    }
+}

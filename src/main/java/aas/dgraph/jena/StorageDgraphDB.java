@@ -143,7 +143,7 @@ public class StorageDgraphDB implements StorageRDF {
     }
 
     private void ensureWriteTxn() {
-        Transaction txn = this.txnSystem.getThreadTransaction();
-        txn.ensureWriteTxn();
+//        Transaction txn = this.txnSystem.getThreadTransaction();
+//        txn.ensureWriteTxn();
     }
 }
