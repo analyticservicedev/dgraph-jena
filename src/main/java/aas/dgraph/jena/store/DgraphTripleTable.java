@@ -1,26 +1,26 @@
 package aas.dgraph.jena.store;
 
 import aas.dgraph.jena.client.DgraphService;
-import io.dgraph.*;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import org.apache.jena.base.Sys;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.graph.impl.TripleStore;
+import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-public class DgraphTripleTable {
+public class DgraphTripleTable implements TripleStore {
     private static final Logger logger = LoggerFactory.getLogger(DgraphTripleTable.class);
     private final DgraphService dgraph;
 
     public DgraphTripleTable(String dgraphEndpoint) {
         this.dgraph = new DgraphService(dgraphEndpoint);
+    }
+
+    @Override
+    public void close() {
+        logger.info("Close Triple Store");
     }
 
     public void add(Triple triple) {
@@ -34,6 +34,52 @@ public class DgraphTripleTable {
 
     public void delete(Triple triple) {
         this.delete(triple.getSubject(), triple.getPredicate(), triple.getObject());
+    }
+
+    @Override
+    public int size() {
+        logger.info("Get Size");
+        return dgraph.findAllSize();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    @Override
+    public boolean contains(Triple t) {
+        return dgraph.hasTriple(t);
+    }
+
+    @Override
+    public ExtendedIterator<Node> listSubjects() {
+        return dgraph.findAllSubjects();
+    }
+
+    // TODO fix
+    public ExtendedIterator<Node> findAll() {
+        return dgraph.findAllSubjects();
+    }
+
+    @Override
+    public ExtendedIterator<Node> listPredicates() {
+        return dgraph.findAllPredicates();
+    }
+
+    @Override
+    public ExtendedIterator<Node> listObjects() {
+        return dgraph.findAllObjects();
+    }
+
+    @Override
+    public ExtendedIterator<Triple> find(Triple t) {
+        return dgraph.findTriple(t);
+    }
+
+    @Override
+    public void clear() {
+        clearTriples();
     }
 
     public void delete(Node s, Node p, Node o) {

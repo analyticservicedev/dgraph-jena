@@ -13,6 +13,7 @@ import org.apache.jena.atlas.json.JsonObject;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
+import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -222,5 +223,29 @@ public class DgraphService {
             e.printStackTrace();
             logger.error(e.toString());
         }
+    }
+
+    public int findAllSize() {
+        return 0;
+    }
+
+    public boolean hasTriple(Triple t) {
+        return false;
+    }
+
+    public ExtendedIterator<Node> findAllSubjects() {
+        return null;
+    }
+
+    public ExtendedIterator<Node> findAllPredicates() {
+        return null;
+    }
+
+    public ExtendedIterator<Node> findAllObjects() {
+        return null;
+    }
+
+    public ExtendedIterator<Triple> findTriple(Triple t) {
+        return null;
     }
 }

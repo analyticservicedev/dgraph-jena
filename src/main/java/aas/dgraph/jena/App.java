@@ -2,7 +2,6 @@ package aas.dgraph.jena;
 
 import org.apache.jena.dboe.base.file.Location;
 import org.apache.jena.fuseki.main.FusekiServer;
-import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -11,7 +10,6 @@ import org.apache.jena.reasoner.InfGraph;
 import org.apache.jena.reasoner.rulesys.GenericRuleReasoner;
 import org.apache.jena.reasoner.rulesys.GenericRuleReasonerFactory;
 import org.apache.jena.reasoner.rulesys.Rule;
-import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.util.PrintUtil;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
