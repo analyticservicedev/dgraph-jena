@@ -14,6 +14,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.util.iterator.WrappedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -226,19 +227,28 @@ public class DgraphService {
     }
 
     public int findAllSize() {
+
         return 0;
     }
 
     public boolean hasTriple(Triple t) {
         return false;
     }
-
+    private List<Node> findAllSubjectsInList(){
+        return Collections.emptyList();
+    }
     public ExtendedIterator<Node> findAllSubjects() {
         return null;
     }
 
     public ExtendedIterator<Node> findAllPredicates() {
-        return null;
+        List<String> preds = predicates();
+        List<Node> nodes = new LinkedList<>();
+        for (String node : preds) {
+            Node n = NodeFactory.createLiteral(node);
+            nodes.add(n);
+        }
+        return WrappedIterator.create(nodes.iterator());
     }
 
     public ExtendedIterator<Node> findAllObjects() {

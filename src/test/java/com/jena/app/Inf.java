@@ -11,6 +11,7 @@ import org.apache.jena.dboe.transaction.txn.TransactionalBase;
 import org.apache.jena.dboe.transaction.txn.TransactionalSystem;
 import org.apache.jena.dboe.transaction.txn.journal.Journal;
 import org.apache.jena.fuseki.main.FusekiServer;
+import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
@@ -33,7 +34,7 @@ public class Inf {
         Journal journal = Journal.create(Location.create("dgraph"));
         TransactionCoordinator txnCoord = new TransactionCoordinator(journal);
         TransactionalSystem txnSystem = new TransactionalBase(txnCoord);
-        String dgraphEndpoint = "localhost:8080";
+        String dgraphEndpoint = "localhost:9080";
         DgraphQuadTable quadTable = new DgraphQuadTable(dgraphEndpoint);
         DgraphTripleTable tripleTable = new DgraphTripleTable(dgraphEndpoint);
         StorageDgraphDB dsg = new StorageDgraphDB(txnSystem, tripleTable, quadTable);
@@ -94,8 +95,8 @@ public class Inf {
                         + "[ruleConnTrans: (?p :股东 ?c) (?p :股东 ?c2) -> (?c :关联交易 ?c2)] \n"
                         + "-> tableAll()."));
         reasoner.setMode(GenericRuleReasoner.HYBRID);
-
-        InfGraph infgraph = reasoner.bind(myMod.getGraph());
+        Graph g = myMod.getGraph();
+        InfGraph infgraph = reasoner.bind(g);
         infgraph.setDerivationLogging(true);
 
         System.out.println("推理后...\n");
